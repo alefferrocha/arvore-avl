@@ -122,9 +122,63 @@ int insere_no(No **p, int x) {
     return cresceu;
 }
 
+int remove_no(No **p, int x) {
+    if((*p) == NULL) {
+        puts("A arvore esta vazia.");
+        return 0;
+    }
+
+    No *aux = NULL, *tmp = NULL, *pai = NULL;
+
+    do {
+        aux = (*p);
+
+        if(x < (*p)->chave)
+            aux = (*p)->esq;
+        else if (x >= (*p)->chave)
+            aux = (*p)->dir;
+    } while((aux != NULL) && (aux->chave != x));
+
+    if(aux != NULL) {
+        if((aux->esq != NULL) && (aux->dir != NULL)) {
+            tmp = aux;
+            pai = aux;
+            aux = aux->dir;
+
+            while(aux->esq != NULL) {
+                pai = aux;
+                aux = aux->esq;
+            }
+
+            tmp->chave = aux->chave;
+        }
+        else if((aux->esq != NULL) && (aux->dir == NULL)) {
+            if(pai->esq == aux)
+                pai->esq = aux->esq;
+            else
+                pai->dir = aux->esq;
+        }
+        else if((aux->esq == NULL) && (aux->dir != NULL)) {
+            if(pai->esq == aux)
+                pai->esq = aux->dir;
+            else
+                pai->dir = aux->dir;
+        }
+        else{
+            if(pai->esq == aux)
+                pai->esq = NULL;
+            else
+                pai->dir = NULL;
+        }
+
+        free(aux);
+    }
+
+    return 1;
+}
+
 No *busca_no(No **p, int x) {
     if((*p) == NULL) {
-        puts("Parametro invalido.");
         puts("A arvore esta vazia.");
         return NULL;
     }
@@ -143,28 +197,28 @@ No *busca_no(No **p, int x) {
 }
 
 int rot_dir(No **p) {
-    No *q, *tmp;
+    No *q, *aux;
 
     if((*p) == NULL) return 1;
 
     q = (*p)->esq;
-    tmp = q->dir;
+    aux = q->dir;
     q->dir = (*p);
-    (*p)->esq = tmp;
+    (*p)->esq = aux;
     (*p) = q;
 
     return 0;
 }
 
 int rot_esq(No **p) {
-    No *q, *tmp;
+    No *q, *aux;
 
     if((*p) == NULL) return 1;
 
     q = (*p)->dir;
-    tmp = q->esq;
+    aux = q->esq;
     q->esq = (*p);
-    (*p)->dir = tmp;
+    (*p)->dir = aux;
     (*p) = q;
 
     return 0;
