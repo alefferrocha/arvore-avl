@@ -40,11 +40,21 @@ int insere_no(No **p, int x); // OK
 // Busca por x, caso existe, remove
 int remove_no(No **p, int x);
 
+No *transplanta_menor_direita(No **p, No **no_dir);
+
+// Recebe um no **p que aponta para a raiz da arvore
+// Arruma o balanceamento da arvore
+int bal_esq(No **p);
+
+// Recebe um no **p que aponta para a raiz da arvore
+// Arruma o balanceamento da arvore
+int bal_dir(No **p);
+
 // Recebe um inteiro x e um no **p que aponta para a raiz da arvore
 // Retorna o endereco do no caso x existe na arvore e NULL caso x nao existe
 No *busca_no(No **p, int x) ;
 
-// Recebe um inteiro x e um no **p que aponta para a raiz da arvore
+// Recebe um no **p que aponta para a raiz da arvore
 // Imprime o item chave de cada no da arvore pre ordem
 void pre_ordem(No **p); // OK
 
@@ -52,7 +62,7 @@ void pre_ordem(No **p); // OK
 // Imprime o item chave de cada no da arvore em ordem
 void em_ordem(No **p); // OK
 
-// Recebe um inteiro x e um no **p que aponta para a raiz da arvore
+// Recebe um no **p que aponta para a raiz da arvore
 // Imprime o item chave de cada no da arvore pos ordem
 void pos_ordem(No **p); // OK
 

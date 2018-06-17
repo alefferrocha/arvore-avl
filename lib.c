@@ -122,35 +122,41 @@ int insere_no(No **p, int x) {
     return cresceu;
 }
 
+No *transplanta_menor_direita(No **p, No **no_dir) {
+    No *aux;
+
+    if((*no_dir)->esq == NULL) {
+        (*p)->chave = (*no_dir)->chave;
+        aux = (*no_dir);
+        (*no_dir) =  (*no_dir)->esq;
+        return aux;
+    }
+    else {
+        transplanta_menor_direita(&(*p), &(*no_dir)->esq);
+    }
+}
+
 int remove_no(No **p, int x) {
     if((*p) == NULL) {
         puts("A arvore esta vazia.");
         return 0;
     }
 
-    No *aux = NULL, *tmp = NULL, *pai = NULL;
+    No *aux = (*p), *tmp = NULL, *pai = NULL;
 
     do {
-        aux = (*p);
+        pai = aux;
 
-        if(x < (*p)->chave)
-            aux = (*p)->esq;
-        else if (x >= (*p)->chave)
-            aux = (*p)->dir;
+        if(x < aux->chave)
+            aux = aux->esq;
+        else if (x >= aux->chave)
+            aux = aux->dir;
     } while((aux != NULL) && (aux->chave != x));
 
     if(aux != NULL) {
         if((aux->esq != NULL) && (aux->dir != NULL)) {
-            tmp = aux;
-            pai = aux;
-            aux = aux->dir;
+            aux = transplanta_menor_direita(&aux, &aux->dir);
 
-            while(aux->esq != NULL) {
-                pai = aux;
-                aux = aux->esq;
-            }
-
-            tmp->chave = aux->chave;
         }
         else if((aux->esq != NULL) && (aux->dir == NULL)) {
             if(pai->esq == aux)
@@ -176,6 +182,84 @@ int remove_no(No **p, int x) {
 
     return 1;
 }
+
+// No *bal_esq(No **p) {
+//     No *filho_dir;
+//     int bal_filho_dir, flag;
+//
+//     switch ((*p)->bal) {
+//         case 1:
+//             (*p)->bal = 0;
+//             break;
+//         case 0:
+//             (*p)->bal = -1;
+//             flag = 0;
+//             break;
+//         case -1:
+//             filho_dir = (*p)->dir;
+//             bal_filho_dir = filho_dir->bal;
+//
+//             if(bal_filho_dir <= 0) {
+//                 rot_dir(p);
+//
+//                 if(bal_filho_dir == 0) {
+//                     (*p)->bal = -1;
+//                     filho_dir->bal = 1;
+//                     flag = 0;
+//                 }
+//                 else {
+//                     (*p)->bal = 0;
+//                     filho_dir->bal = 0;
+//                 }
+//                 (*p) = filho_dir;
+//             }
+//             else {
+//                 rot_esq(p);
+//                 rot_dir(p);
+//
+//                 (*p)->bal = 0;
+//             }
+//     }
+// }
+//
+// No *bal_dir(No **p) {
+//     No *filho_esq;
+//     int bal_filho_esq, flag;
+//
+//     switch ((*p)->bal) {
+//         case -1:
+//             (*p)->bal = 0;
+//             break;
+//         case 0:
+//             (*p)->bal = 1;
+//             flag = 0;
+//             break;
+//         case 1:
+//             filho_esq = (*p)->esq;
+//             bal_filho_esq = filho_esq->bal;
+//
+//             if(bal_filho_esq >= 0) {
+//                 rot_esq(p);
+//
+//                 if(bal_filho_esq == 0) {
+//                     (*p)->bal = 1;
+//                     filho_esq->bal = -1;
+//                     flag = 0;
+//                 }
+//                 else {
+//                     (*p)->bal = 0;
+//                     filho_esq->bal = 0;
+//                 }
+//                 (*p) = filho_esq;
+//             }
+//             else {
+//                 rot_dir(p);
+//                 rot_esq(p);
+//
+//                 (*p)->bal = 0;
+//             }
+//     }
+// }
 
 No *busca_no(No **p, int x) {
     if((*p) == NULL) {
