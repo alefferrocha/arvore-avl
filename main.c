@@ -6,18 +6,25 @@ int main(void) {
 
     srand(time(NULL));
 
-    for(i = 0; i < 5; i++) {
+    for(i = 0; i < 7; i++) {
         insere_no(&raiz, i);
     }
 
     printf("Caminhamento Em-Ordem:\n");
     em_ordem(&raiz);
+    printf("\n\n\nAltura %d \n\n", altura(&raiz));
 
-    remove_no(&raiz, 3);
-
+    puts("Removendo chave [3]");
+    delete(&raiz, 3);
     printf("Caminhamento Em-Ordem:\n");
     em_ordem(&raiz);
+    printf("\n\n\nAltura %d \n\n", altura(&raiz));
 
+    // puts("Removendo chave [3]");
+    // delete(&raiz, 3);
+    // printf("Caminhamento Em-Ordem:\n");
+    // em_ordem(&raiz);
+    // printf("\n\n\nAltura %d \n\n", altura(&raiz));
 
     return 0;
 }

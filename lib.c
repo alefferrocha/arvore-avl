@@ -122,144 +122,196 @@ int insere_no(No **p, int x) {
     return cresceu;
 }
 
-No *transplanta_menor_direita(No **p, No **no_dir) {
-    No *aux;
+No *del(No **p) {
+    No *aux = (*p), *pai = (*p);
 
-    if((*no_dir)->esq == NULL) {
-        (*p)->chave = (*no_dir)->chave;
-        aux = (*no_dir);
-        (*no_dir) =  (*no_dir)->esq;
-        return aux;
+    while(aux->dir != NULL) {
+        pai = aux;
+        aux = aux->dir;
+    }
+
+    pai->dir = NULL;
+    bal_dir(&pai);
+    return aux;
+}
+
+int delete(No **p, int x) {
+    No *q, *aux = NULL;
+    int flag = 0;
+
+    if((*p) == NULL) {
+        return 0;
+    }
+    else if((*p)->chave > x) {
+        flag = delete(&(*p)->esq, x);
+
+        if(flag){
+            puts("Mandei balancear");
+            bal_esq(&(*p));
+        }
+    }
+    else if((*p)->chave < x) {
+        flag = delete(&(*p)->dir, x);
+
+        if(flag){
+            puts("Mandei balancear");
+            bal_dir(&(*p));
+        }
     }
     else {
-        transplanta_menor_direita(&(*p), &(*no_dir)->esq);
+        q = (*p);
+
+        if(q->dir == NULL) {
+            (*p) = q->esq;
+            return 1;
+        }
+        else if(q->esq == NULL) {
+            (*p) = q->dir;
+            return 1;
+        }
+        else {
+            aux = del(&q->esq);
+
+            (*p)->chave = aux->chave;
+            (*p)->bal = aux->bal;
+            // free(aux);
+
+        }
     }
 }
 
-int remove_no(No **p, int x) {
+int bal_esq(No **p) {
+    No *p1, *p2;
+
     if((*p) == NULL) {
-        puts("A arvore esta vazia.");
         return 0;
     }
 
-    No *aux = (*p), *tmp = NULL, *pai = NULL;
+    printf("Esq: Chave [%d] \n Bal [%d]\n\n", (*p)->chave, (*p)->bal);
 
-    do {
-        pai = aux;
-
-        if(x < aux->chave)
-            aux = aux->esq;
-        else if (x >= aux->chave)
-            aux = aux->dir;
-    } while((aux != NULL) && (aux->chave != x));
-
-    if(aux != NULL) {
-        if((aux->esq != NULL) && (aux->dir != NULL)) {
-            aux = transplanta_menor_direita(&aux, &aux->dir);
-
-        }
-        else if((aux->esq != NULL) && (aux->dir == NULL)) {
-            if(pai->esq == aux)
-                pai->esq = aux->esq;
-            else
-                pai->dir = aux->esq;
-        }
-        else if((aux->esq == NULL) && (aux->dir != NULL)) {
-            if(pai->esq == aux)
-                pai->esq = aux->dir;
-            else
-                pai->dir = aux->dir;
-        }
-        else{
-            if(pai->esq == aux)
-                pai->esq = NULL;
-            else
-                pai->dir = NULL;
-        }
-
-        free(aux);
+    if((*p)->bal == -1) {
+        (*p)->bal = 0;
+        return 1;
     }
+    else if((*p)->bal == 0) {
+        (*p)->bal = 1;
+        return 0;
+    }
+    else {
+        p1 = (*p)->dir;
 
-    return 1;
+        if(p1->bal >= 0) {
+            (*p)->dir = p1->esq;
+            p1->esq = (*p);
+
+            if(p1->bal == 0) {
+                (*p)->bal = 1;
+                p1->bal = -1;
+                (*p) = p1;
+                return 0;
+            }
+            else {
+                (*p)->bal = 0;
+                p1->bal = 0;
+                (*p) = p1;
+                return 1;
+            }
+        }
+        else {
+            p2 = p1->esq;
+            p1->esq = p2->dir;
+            p2->dir = p1;
+            (*p)->dir = p2->esq;
+            p2->esq = (*p);
+
+            if(p2->bal == 1) {
+                (*p)->bal = -1;
+            }
+            else {
+                (*p)->bal = 0;
+            }
+
+            if(p2->bal == -1) {
+                p1->bal = 1;
+            }
+            else {
+                p1->bal = 0;
+            }
+
+            (*p) = p2;
+            p2->bal = 0;
+
+            return 1;
+        }
+    }
 }
 
-// No *bal_esq(No **p) {
-//     No *filho_dir;
-//     int bal_filho_dir, flag;
-//
-//     switch ((*p)->bal) {
-//         case 1:
-//             (*p)->bal = 0;
-//             break;
-//         case 0:
-//             (*p)->bal = -1;
-//             flag = 0;
-//             break;
-//         case -1:
-//             filho_dir = (*p)->dir;
-//             bal_filho_dir = filho_dir->bal;
-//
-//             if(bal_filho_dir <= 0) {
-//                 rot_dir(p);
-//
-//                 if(bal_filho_dir == 0) {
-//                     (*p)->bal = -1;
-//                     filho_dir->bal = 1;
-//                     flag = 0;
-//                 }
-//                 else {
-//                     (*p)->bal = 0;
-//                     filho_dir->bal = 0;
-//                 }
-//                 (*p) = filho_dir;
-//             }
-//             else {
-//                 rot_esq(p);
-//                 rot_dir(p);
-//
-//                 (*p)->bal = 0;
-//             }
-//     }
-// }
-//
-// No *bal_dir(No **p) {
-//     No *filho_esq;
-//     int bal_filho_esq, flag;
-//
-//     switch ((*p)->bal) {
-//         case -1:
-//             (*p)->bal = 0;
-//             break;
-//         case 0:
-//             (*p)->bal = 1;
-//             flag = 0;
-//             break;
-//         case 1:
-//             filho_esq = (*p)->esq;
-//             bal_filho_esq = filho_esq->bal;
-//
-//             if(bal_filho_esq >= 0) {
-//                 rot_esq(p);
-//
-//                 if(bal_filho_esq == 0) {
-//                     (*p)->bal = 1;
-//                     filho_esq->bal = -1;
-//                     flag = 0;
-//                 }
-//                 else {
-//                     (*p)->bal = 0;
-//                     filho_esq->bal = 0;
-//                 }
-//                 (*p) = filho_esq;
-//             }
-//             else {
-//                 rot_dir(p);
-//                 rot_esq(p);
-//
-//                 (*p)->bal = 0;
-//             }
-//     }
-// }
+int bal_dir(No **p) {
+    No *p1, *p2;
+    int b2;
+
+    if((*p) == NULL) {
+        return 0;
+    }
+
+    printf("Dir: Chave [%d] -- Bal [%d]\n\n", (*p)->chave, (*p)->bal);
+
+    if((*p)->bal == 1) {
+        (*p)->bal = 0;
+        return 1;
+    }
+    else if((*p)->bal == 0) {
+        (*p)->bal = -1;
+        return 0;
+    }
+    else {
+        p1 = (*p)->esq;
+
+        if(p1->bal <= 0) {
+            (*p)->esq = p1->dir;
+            p1->dir = (*p);
+
+            if(p1->bal == 0) {
+                (*p)->bal = -1;
+                p1->bal = 1;
+                (*p) = p1;
+                return 0;
+            }
+            else {
+                (*p)->bal = 0;
+                p1->bal = 0;
+                (*p) = p1;
+                return 1;
+            }
+        }
+        else {
+            p2 = p1->dir;
+            b2 = p2->bal;
+            p1->dir = p2->esq;
+            p2->esq = (*p);
+
+            if(p2->bal == -1) {
+                (*p)->bal = 1;
+            }
+            else {
+                (*p)->bal = 0;
+            }
+
+            if(p2->bal == 1) {
+                p1->bal = -1;
+            }
+            else {
+                p1->bal = 0;
+            }
+
+            (*p) = p2;
+            p2->bal = 0;
+
+            return 1;
+        }
+    }
+}
+
 
 No *busca_no(No **p, int x) {
     if((*p) == NULL) {
@@ -319,7 +371,7 @@ void pre_ordem(No **p) {
 void em_ordem(No **p) {
     if((*p) != NULL){
         em_ordem(&(*p)->esq);
-        printf("%d\n", (*p)->chave);
+        printf("Chave [%d] --- Bal [%d]\n", (*p)->chave, (*p)->bal);
         em_ordem(&(*p)->dir);
     }
 }

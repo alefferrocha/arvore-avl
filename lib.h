@@ -36,19 +36,15 @@ typedef struct _no {
 // Insere x na arvore
 int insere_no(No **p, int x); // OK
 
-// Recebe um inteiro x e um no **p que aponta para a raiz da arvore
-// Busca por x, caso existe, remove
-int remove_no(No **p, int x);
 
-No *transplanta_menor_direita(No **p, No **no_dir);
+No *del(No **p);
 
-// Recebe um no **p que aponta para a raiz da arvore
-// Arruma o balanceamento da arvore
+int delete(No **p, int x);
+
 int bal_esq(No **p);
 
-// Recebe um no **p que aponta para a raiz da arvore
-// Arruma o balanceamento da arvore
 int bal_dir(No **p);
+
 
 // Recebe um inteiro x e um no **p que aponta para a raiz da arvore
 // Retorna o endereco do no caso x existe na arvore e NULL caso x nao existe
