@@ -6,7 +6,7 @@ int main(void) {
 
     srand(time(NULL));
 
-    for(i = 0; i < 7; i++) {
+    for(i = 9; i >=  2; i--) {
         insere_no(&raiz, i);
     }
 
@@ -14,17 +14,12 @@ int main(void) {
     em_ordem(&raiz);
     printf("\n\n\nAltura %d \n\n", altura(&raiz));
 
-    puts("Removendo chave [3]");
-    delete(&raiz, 3);
+    puts("Removendo chave [5]");
+    delete(&raiz, 5);
     printf("Caminhamento Em-Ordem:\n");
     em_ordem(&raiz);
     printf("\n\n\nAltura %d \n\n", altura(&raiz));
 
-    // puts("Removendo chave [3]");
-    // delete(&raiz, 3);
-    // printf("Caminhamento Em-Ordem:\n");
-    // em_ordem(&raiz);
-    // printf("\n\n\nAltura %d \n\n", altura(&raiz));
 
     return 0;
 }
