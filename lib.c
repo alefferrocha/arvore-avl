@@ -207,15 +207,15 @@ int bal_esq(No **p) {
             if(p1->bal == 0) {
                 (*p)->bal = 1;
                 p1->bal = -1;
-                (*p) = p1;
-                return 0;
             }
             else {
                 (*p)->bal = 0;
                 p1->bal = 0;
-                (*p) = p1;
-                return 1;
             }
+
+			(*p) = p1;
+
+			return 1;
         }
         else {
             p2 = p1->esq;
