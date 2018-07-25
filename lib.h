@@ -36,6 +36,7 @@ typedef struct _no {
 // Insere x na arvore
 int insere_no(No **p, int x); // OK
 
+int salvaMatriz(matriz_esparsa *mat);
 
 No *del(No **p);
 
