@@ -362,9 +362,9 @@ int rot_esq(No **p) {
 
 void pre_ordem(No **p) {
     if((*p) != NULL){
+	printf("%d\n", (*p)->chave);
         pre_ordem(&(*p)->esq);
         pre_ordem(&(*p)->dir);
-        printf("%d\n", (*p)->chave);
     }
 }
 
@@ -378,9 +378,9 @@ void em_ordem(No **p) {
 
 void pos_ordem(No **p) {
     if((*p) != NULL){
-        printf("%d\n", (*p)->chave);
         pos_ordem(&(*p)->esq);
         pos_ordem(&(*p)->dir);
+	 printf("%d\n", (*p)->chave);
     }
 }
 
