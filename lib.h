@@ -2,7 +2,7 @@
  * File:   lib.h
  * Author: Aleffer Rocha
  *
- * Created on 8 de Maio de 2018, 16:19
+ * Created on 2018-05-8
  */
 
 #ifndef _H_AVL_
@@ -35,8 +35,6 @@ typedef struct _no {
 // Recebe um inteiro x e um no **p que aponta para a raiz da arvore
 // Insere x na arvore
 int insere_no(No **p, int x); // OK
-
-int salvaMatriz(matriz_esparsa *mat);
 
 No *del(No **p);
 
